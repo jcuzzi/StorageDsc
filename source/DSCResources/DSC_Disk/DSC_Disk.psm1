@@ -117,6 +117,10 @@ function Get-TargetResource
         -DriveLetter $DriveLetter `
         -ErrorAction SilentlyContinue
 
+    if ($partition -is [array] -and $disk) {
+        $partition = $partition | Where-Object { $_.DiskPath -eq $disk.Path }
+    }
+
     $volume = Get-Volume `
         -DriveLetter $DriveLetter `
         -ErrorAction SilentlyContinue
@@ -793,6 +797,10 @@ function Test-TargetResource
     $partition = Get-Partition `
         -DriveLetter $DriveLetter `
         -ErrorAction SilentlyContinue
+
+    if ($partition -is [array] -and $disk) {
+        $partition = $partition | Where-Object { $_.DiskPath -eq $disk.Path }
+    }
 
     if ($partition.DriveLetter -ne $DriveLetter)
     {
